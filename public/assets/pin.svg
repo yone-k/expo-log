@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="map pin icon">
 <title>map pin icon</title>
 <desc>Generated pin icon for visited pavilion</desc>
-<circle cx="64" cy="50" r="36" fill="#16a34a" />
-<path d="M 44.0 80 L 84.0 80 L 64 118 Z" fill="#16a34a" />
+<circle cx="64" cy="50" r="36" fill="#dc2626" />
+<path d="M 44.0 80 L 84.0 80 L 64 118 Z" fill="#dc2626" />
 <path d="M 48.0 54.0 L 60.0 68.0 L 84.0 42.0" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" opacity="1.0" />
 </svg>

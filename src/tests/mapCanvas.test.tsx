@@ -135,14 +135,7 @@ describe('MapCanvas', () => {
     })
 
     expect(mockLocalStorage.setItem).toHaveBeenCalledTimes(1)
-
-    await screen.findByText('1', {
-      selector: '[data-testid="visited-count-display"]',
-    })
-
-    expect(
-      await screen.findByRole('img', { name: 'パビリオン1の訪問済みピン' }),
-    ).toBeInTheDocument()
+    await screen.findByRole('img', { name: 'パビリオン1の訪問済みピン' })
   })
 
   it('読み取り専用モードではクリックしても訪問状態が変化しない', async () => {

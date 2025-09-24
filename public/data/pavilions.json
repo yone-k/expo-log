@@ -1,0 +1,20 @@
+[
+  {
+    "id": "test-001",
+    "name": "テストパビリオンA",
+    "coordinate": { "x": 0.48, "y": 0.45 },
+    "hitboxRadius": 0.03
+  },
+  {
+    "id": "test-002",
+    "name": "テストパビリオンB",
+    "coordinate": { "x": 0.52, "y": 0.47 },
+    "hitboxRadius": 0.03
+  },
+  {
+    "id": "test-003",
+    "name": "テストパビリオンC",
+    "coordinate": { "x": 0.5, "y": 0.51 },
+    "hitboxRadius": 0.035
+  }
+]

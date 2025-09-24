@@ -158,13 +158,18 @@ export function findHitPavilion(
   }
 
   // JSON定義順（配列順）でチェック。最初にヒットしたものを返す
+  let closest: { pavilion: Pavilion; distance: number } | null = null;
+
   for (const pavilion of pavilions) {
     const hitbox = calculatePavilionHitbox(pavilion, mapSize, defaultRadius);
 
     if (isPointInHitbox(clickPoint, hitbox.center, hitbox.radius)) {
-      return pavilion;
+      const distance = getSquaredDistance(clickPoint, hitbox.center);
+      if (!closest || distance < closest.distance) {
+        closest = { pavilion, distance };
+      }
     }
   }
 
-  return null;
+  return closest ? closest.pavilion : null;
 }

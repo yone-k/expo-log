@@ -135,7 +135,7 @@ describe('ヒットボックス判定機能', () => {
       expect(result?.id).toBe('us-001');
     });
 
-    it('重複領域ではJSON定義順（配列の最初の要素）を優先する', () => {
+    it('重複領域ではより近いパビリオンを優先する（既存データ）', () => {
       // テスト用に近接したパビリオンを作成
       const overlappingPavilions: Pavilion[] = [
         {
@@ -162,9 +162,38 @@ describe('ヒットボックス判定機能', () => {
       const overlapPoint = { x: 410, y: 310 }; // 重複領域内の点
       const result = findHitPavilion(overlapPoint, overlapParams);
 
-      // 配列で最初に定義されたfirst-pavilionを優先
-      expect(result?.id).toBe('first-pavilion');
+      // second-pavilionの方がクリック地点に近い
+      expect(result?.id).toBe('second-pavilion');
     });
+
+    it('重複領域では最も近いパビリオンを優先する', () => {
+      const overlappingPavilions: Pavilion[] = [
+        {
+          id: 'near',
+          name: 'Near Pavilion',
+          coordinate: { x: 0.5, y: 0.5 },
+          hitboxRadius: 0.1,
+        },
+        {
+          id: 'far',
+          name: 'Far Pavilion',
+          coordinate: { x: 0.6, y: 0.6 },
+          hitboxRadius: 0.1,
+        },
+      ]
+
+      const overlapParams: HitboxTestParams = {
+        pavilions: overlappingPavilions,
+        mapSize: mockMapSize,
+        defaultRadius,
+      }
+
+      const closerToFar = { x: 460, y: 340 }
+      expect(findHitPavilion(closerToFar, overlapParams)?.id).toBe('far')
+
+      const closerToNear = { x: 410, y: 310 }
+      expect(findHitPavilion(closerToNear, overlapParams)?.id).toBe('near')
+    })
 
     it('エッジケース：マップ範囲外の座標でnullを返す', () => {
       const result1 = findHitPavilion({ x: -10, y: 100 }, hitboxParams);

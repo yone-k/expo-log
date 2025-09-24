@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useState, useCallback, useMemo } from 'react';
 import type { Pavilion, VisitedState } from '../types/pavilion';
-import { decodeVisitedStateFromUrl } from '../utils/shareUrl';
+import { decodeVisitedStateFromUrl, encodeVisitedStateToUrl } from '../utils/shareUrl';
 
 /**
  * 訪問状態管理のContext型定義
@@ -20,6 +20,8 @@ export interface VisitedStateContextValue {
   pavilions: readonly Pavilion[];
   /** デフォルトのヒットボックス半径 */
   defaultHitboxRadius: number;
+  /** 訪問状態をBase64URLに変換した文字列 */
+  encodeVisitedState: () => string;
 }
 
 /**
@@ -235,7 +237,8 @@ export function VisitedStateProvider({
       isEditMode,
       toggleVisited,
       switchToEditMode,
-      ...stableConfig
+      ...stableConfig,
+      encodeVisitedState: () => encodeVisitedStateToUrl(visitedState, pavilions),
     }),
     [
       visitedState,
