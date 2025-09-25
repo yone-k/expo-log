@@ -1,0 +1,13 @@
+name: CI (placeholder)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  noop:
+    name: No-op Placeholder
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm workflow wiring
+        run: echo "CI placeholder - no actions executed"
