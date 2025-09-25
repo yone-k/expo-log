@@ -21,6 +21,8 @@ const PIN_ICON_SRC = `${import.meta.env.BASE_URL}assets/pin.svg`
 const MAP_ALT_TEXT = '大阪・関西万博マップ'
 const DEFAULT_MAP_WIDTH = 2560
 const DEFAULT_MAP_HEIGHT = 1440
+const PIN_BASE_SIZE = 64
+const PIN_MIN_SIZE = 12
 
 function MapCanvas({ mapSrc = DEFAULT_MAP_SRC, className, id }: MapCanvasProps) {
   const {
@@ -38,6 +40,13 @@ function MapCanvas({ mapSrc = DEFAULT_MAP_SRC, className, id }: MapCanvasProps) 
     height: DEFAULT_MAP_HEIGHT,
   })
   const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const pinSize = useMemo(() => {
+    const scale = mapSize.width / DEFAULT_MAP_WIDTH
+    const computedSize = PIN_BASE_SIZE * scale
+    return Number.isFinite(computedSize)
+      ? Math.max(computedSize, PIN_MIN_SIZE)
+      : PIN_BASE_SIZE
+  }, [mapSize.width])
 
   const updateSize = useCallback(() => {
     const element = containerRef.current
@@ -161,8 +170,8 @@ function MapCanvas({ mapSrc = DEFAULT_MAP_SRC, className, id }: MapCanvasProps) 
               left: `${pixel.x}px`,
               top: `${pixel.y}px`,
               transform: 'translate(-50%, -100%)',
-              width: '24px',
-              height: '24px',
+              width: `${pinSize}px`,
+              height: `${pinSize}px`,
               pointerEvents: 'none',
             }}
           />
