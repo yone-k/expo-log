@@ -27,7 +27,8 @@ function App() {
    const [pavilions, setPavilions] = useState<Pavilion[]>([])
    const [status, setStatus] = useState<FetchState>('loading')
    const [errorMessage, setErrorMessage] = useState('')
- 
+
+   const homeUrl = import.meta.env.BASE_URL || '/'
    const searchParams = useMemo(() => new URLSearchParams(window.location.search), [])
    const initialMode = useMemo(() => parseMode(searchParams), [searchParams])
    const initialVisited = useMemo(() => parseVisited(searchParams), [searchParams])
@@ -82,7 +83,7 @@ function App() {
        <main className="app-layout">
         <header className="app-header">
           <h1>
-            <a href="/">EXPO LOG</a>
+            <a href={homeUrl}>EXPO LOG</a>
           </h1>
          </header>
          <section className="app-content">
