@@ -22,7 +22,7 @@ const MAP_ALT_TEXT = '大阪・関西万博マップ'
 const DEFAULT_MAP_WIDTH = 2560
 const DEFAULT_MAP_HEIGHT = 1440
 const PIN_BASE_SIZE = 64
-const PIN_MIN_SIZE = 12
+const PIN_MIN_SIZE = 8
 
 function MapCanvas({ mapSrc = DEFAULT_MAP_SRC, className, id }: MapCanvasProps) {
   const {
