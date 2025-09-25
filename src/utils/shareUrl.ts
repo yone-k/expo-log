@@ -20,7 +20,7 @@ export function createBitString(visitedState: VisitedState, pavilions: readonly 
 
   // 各パビリオンの訪問状態をビットに変換（未訪問も明示的にfalseとして扱う）
   return sortedPavilions
-    .map(pavilion => Boolean(visitedState[pavilion.id]) ? '1' : '0')
+    .map(pavilion => (visitedState[pavilion.id] ? '1' : '0'))
     .join('');
 }
 
@@ -181,7 +181,9 @@ export function decodeBase64URL(base64UrlString: string): string {
     // 元の長さでトリム
     return bitString.slice(0, originalLength);
   } catch (error) {
-    throw new Error('不正なBase64URL文字列です');
+    const wrappedError = new Error('不正なBase64URL文字列です');
+    (wrappedError as Error & { cause?: unknown }).cause = error;
+    throw wrappedError;
   }
 }
 

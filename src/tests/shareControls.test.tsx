@@ -46,7 +46,7 @@ function renderWithProvider(
     initialMode = 'edit',
     initialVisited = '',
     pavilions = mockPavilions,
-    defaultHitboxRadius = 0.02,
+    defaultHitboxRadius = 0.01,
   } = options ?? {}
 
   function Wrapper({ children }: { children: ReactNode }) {

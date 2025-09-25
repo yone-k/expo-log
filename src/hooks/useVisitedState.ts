@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { VisitedStateContext, VisitedStateContextValue } from '../context/VisitedStateProvider';
+import { VisitedStateContext, type VisitedStateContextValue } from '../context/VisitedStateContext';
 
 /**
  * 訪問状態管理のカスタムフック

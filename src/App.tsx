@@ -8,7 +8,7 @@ import type { Pavilion } from './types/pavilion'
 import './App.css'
 
 const DATA_URL = '/data/pavilions.json'
-const DEFAULT_RADIUS = 0.02
+const DEFAULT_RADIUS = 0.01
 const MAP_ELEMENT_ID = 'expo-map'
 
 type FetchState = 'loading' | 'error' | 'ready'
@@ -51,10 +51,9 @@ function App() {
      }
    }
  
-   useEffect(() => {
-     fetchPavilions()
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [])
+  useEffect(() => {
+    fetchPavilions()
+  }, [])
  
    if (status === 'loading') {
      return (

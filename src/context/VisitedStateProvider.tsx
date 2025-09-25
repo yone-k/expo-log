@@ -1,33 +1,7 @@
-import { createContext, ReactNode, useState, useCallback, useMemo } from 'react';
+import { ReactNode, useState, useCallback, useMemo, useEffect } from 'react';
 import type { Pavilion, VisitedState } from '../types/pavilion';
 import { decodeVisitedStateFromUrl, encodeVisitedStateToUrl } from '../utils/shareUrl';
-
-/**
- * 訪問状態管理のContext型定義
- */
-export interface VisitedStateContextValue {
-  /** 現在の訪問状態 */
-  visitedState: VisitedState;
-  /** 現在のモード（'edit' | 'readonly'） */
-  mode: 'edit' | 'readonly';
-  /** 編集モードかどうかの判定 */
-  isEditMode: boolean;
-  /** 訪問状態をトグルする関数 */
-  toggleVisited: (pavilionId: string) => void;
-  /** 読み取り専用モードから編集モードに切り替える関数 */
-  switchToEditMode: () => void;
-  /** パビリオン一覧 */
-  pavilions: readonly Pavilion[];
-  /** デフォルトのヒットボックス半径 */
-  defaultHitboxRadius: number;
-  /** 訪問状態をBase64URLに変換した文字列 */
-  encodeVisitedState: () => string;
-}
-
-/**
- * 訪問状態管理Context
- */
-export const VisitedStateContext = createContext<VisitedStateContextValue | null>(null);
+import { VisitedStateContext, type VisitedStateContextValue } from './VisitedStateContext';
 
 /**
  * VisitedStateProviderのProps型定義
@@ -190,7 +164,7 @@ export function VisitedStateProvider({
       }
 
       setVisitedState(prev => {
-        const currentValue = Boolean(prev[pavilionId]);
+        const currentValue = prev[pavilionId];
         const newValue = !currentValue;
 
         // 値に変更がない場合は早期return（パフォーマンス最適化）
@@ -223,6 +197,23 @@ export function VisitedStateProvider({
     }
   }, [mode, visitedState]);
 
+  // URLクエリを現在状態へ同期
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('mode', mode);
+
+    const encodedVisited = encodeVisitedStateToUrl(visitedState, pavilions);
+    if (encodedVisited) {
+      params.set('visited', encodedVisited);
+    } else {
+      params.delete('visited');
+    }
+
+    const search = params.toString();
+    const newUrl = `${window.location.pathname}${search ? `?${search}` : ''}`;
+    window.history.replaceState({}, '', newUrl);
+  }, [mode, visitedState, pavilions]);
+
   // Context値をメモ化してパフォーマンス最適化
   // パビリオンと半径は変更が稀なため分離してメモ化
   const stableConfig = useMemo(
@@ -237,8 +228,7 @@ export function VisitedStateProvider({
       isEditMode,
       toggleVisited,
       switchToEditMode,
-      ...stableConfig,
-      encodeVisitedState: () => encodeVisitedStateToUrl(visitedState, pavilions),
+      ...stableConfig
     }),
     [
       visitedState,

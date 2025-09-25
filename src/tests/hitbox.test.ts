@@ -11,7 +11,7 @@ import { Pavilion } from '../types/pavilion';
 
 describe('ヒットボックス判定機能', () => {
   const mockMapSize = { width: 800, height: 600 };
-  const defaultRadius = 0.02; // デフォルト半径（マップ幅の2%）
+  const defaultRadius = 0.01; // デフォルト半径（マップ幅の1%）
 
   const testPavilions: Pavilion[] = [
     {
@@ -70,12 +70,12 @@ describe('ヒットボックス判定機能', () => {
 
     it('パビリオン固有の半径がnullの場合はデフォルト半径を使用する', () => {
       const radius = calculateHitboxRadius(null, defaultRadius, mockMapSize.width);
-      expect(radius).toBe(16); // 0.02 * 800 = 16
+      expect(radius).toBe(8); // 0.01 * 800 = 8
     });
 
     it('パビリオン固有の半径が未定義の場合はデフォルト半径を使用する', () => {
       const radius = calculateHitboxRadius(undefined, defaultRadius, mockMapSize.width);
-      expect(radius).toBe(16); // 0.02 * 800 = 16
+      expect(radius).toBe(8); // 0.01 * 800 = 8
     });
   });
 
@@ -130,7 +130,7 @@ describe('ヒットボックス判定機能', () => {
     });
 
     it('デフォルト半径を使用するパビリオンでも正しく判定する', () => {
-      // USA Pavilion (x: 560, y: 300, radius: 16) の中心付近をクリック
+      // USA Pavilion (x: 560, y: 300, radius: 8) の中心付近をクリック
       const result = findHitPavilion({ x: 560, y: 300 }, hitboxParams);
       expect(result?.id).toBe('us-001');
     });

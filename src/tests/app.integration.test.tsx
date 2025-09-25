@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import App from '../App'
 import type { Pavilion } from '../types/pavilion'
@@ -61,6 +61,82 @@ describe('App integration', () => {
     const shareGroup = await screen.findByRole('group', { name: '共有設定' })
     const mapColumn = shareGroup.closest('[data-testid="map-column"]')
     expect(mapColumn).not.toBeNull()
+  })
+
+
+  it('訪問状態を更新するとURLのvisitedが更新される', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => samplePavilions,
+    }))
+
+    render(<App />)
+
+    const checkbox = await screen.findByRole('checkbox', { name: '大阪パビリオン' })
+    await waitFor(() => {
+      expect(window.location.search).toContain('mode=edit')
+    })
+
+    fireEvent.click(checkbox)
+
+    await waitFor(() => {
+      expect(window.location.search).toMatch(/visited=/)
+    })
+  })
+
+  it('マップのクリックでURLのvisitedが更新される', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => samplePavilions,
+    }))
+
+    render(<App />)
+
+    const map = await screen.findByTestId('map-canvas')
+    Object.defineProperty(map, 'getBoundingClientRect', {
+      value: () => ({
+        left: 0,
+        top: 0,
+        width: 800,
+        height: 600,
+        right: 800,
+        bottom: 600,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      }),
+    })
+
+    const mapImage = screen.getByRole('img', { name: '大阪・関西万博マップ' })
+    fireEvent.load(mapImage)
+
+    await waitFor(() => {
+      expect(window.location.search).toContain('mode=edit')
+    })
+
+    fireEvent.click(map, { clientX: 400, clientY: 180 })
+
+    await waitFor(() => {
+      expect(window.location.search).toMatch(/visited=/)
+    })
+  })
+
+  it('閲覧モードから編集モードへ切り替えるとURLが変わる', async () => {
+    window.history.replaceState({}, '', '/?mode=readonly')
+
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => samplePavilions,
+    }))
+
+    render(<App />)
+
+    const switchButton = await screen.findByRole('button', { name: '編集する' })
+    fireEvent.click(switchButton)
+
+    await waitFor(() => {
+      expect(window.location.search).toContain('mode=edit')
+    })
   })
 
   it('読み取り専用モードのときチェックボックスが無効化される', async () => {
