@@ -26,6 +26,11 @@ body {
   letter-spacing: 0.08em;
 }
 
+.app-header h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .app-content {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);

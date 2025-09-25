@@ -80,8 +80,10 @@ function App() {
        defaultHitboxRadius={DEFAULT_RADIUS}
      >
        <main className="app-layout">
-         <header className="app-header">
-           <h1>EXPO LOG</h1>
+        <header className="app-header">
+          <h1>
+            <a href="/">EXPO LOG</a>
+          </h1>
          </header>
          <section className="app-content">
           <div className="map-column" data-testid="map-column">
