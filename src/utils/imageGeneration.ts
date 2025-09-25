@@ -6,9 +6,21 @@ export async function captureMapAsPng(selector: string): Promise<string> {
     throw new Error(`指定された要素が見つかりません: ${selector}`)
   }
 
+  const mapImage = element.querySelector('img')
+  let scale = 2
+
+  if (mapImage instanceof HTMLImageElement) {
+    const naturalWidth = mapImage.naturalWidth
+    const renderedWidth = mapImage.getBoundingClientRect().width || mapImage.width
+
+    if (naturalWidth > 0 && renderedWidth > 0) {
+      scale = Math.max(naturalWidth / renderedWidth, 1)
+    }
+  }
+
   const canvas = await html2canvas(element, {
     backgroundColor: null,
-    scale: 2,
+    scale,
   })
 
   return canvas.toDataURL('image/png')
@@ -24,7 +36,7 @@ export async function downloadPng(dataUrl: string, filename: string): Promise<vo
   document.body.removeChild(link)
 }
 
-export function buildFilename(prefix = 'expo-visited'): string {
+export function buildFilename(prefix = 'expo-log'): string {
   const now = new Date()
   const yyyy = now.getFullYear()
   const mm = String(now.getMonth() + 1).padStart(2, '0')
