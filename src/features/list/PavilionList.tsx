@@ -4,10 +4,6 @@ import SearchBox from '../../components/SearchBox'
 
 const SEARCH_LABEL = 'パビリオンを検索'
 
-function sortByName<T extends { name: string }>(items: readonly T[]): T[] {
-  return [...items].sort((a, b) => a.name.localeCompare(b.name, 'ja'))
-}
-
 const normalize = (value: string) => value.trim().toLowerCase()
 
 function PavilionList() {
@@ -20,20 +16,18 @@ function PavilionList() {
 
   const [query, setQuery] = useState('')
 
-  const sortedPavilions = useMemo(() => sortByName(pavilions), [pavilions])
-
   const filteredPavilions = useMemo(() => {
     const normalizedQuery = normalize(query)
 
     if (normalizedQuery === '') {
-      return sortedPavilions
+      return pavilions
     }
 
-    return sortedPavilions.filter(pavilion =>
+    return pavilions.filter(pavilion =>
       normalize(pavilion.name).includes(normalizedQuery) ||
       normalize(pavilion.id).includes(normalizedQuery),
     )
-  }, [query, sortedPavilions])
+  }, [pavilions, query])
 
   const handleSearchChange = (value: string) => {
     setQuery(value)

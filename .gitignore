@@ -6,3 +6,5 @@
 /coverage/
 *.log
 .DS_Store
+/public/data/pavilions.input.json
+/public/data/pavilions.bak.json

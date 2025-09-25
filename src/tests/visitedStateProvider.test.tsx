@@ -216,6 +216,8 @@ describe('VisitedStateProvider', () => {
     });
 
     it('ローカルストレージが利用できない場合のエラーハンドリング', () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       // localStorageのアクセスでエラーを投げる
       mockLocalStorage.getItem.mockImplementation(() => {
         throw new Error('localStorage is not available');
@@ -227,6 +229,9 @@ describe('VisitedStateProvider', () => {
 
       // エラーが発生してもアプリは動作続行
       expect(screen.getByTestId('visited-count')).toHaveTextContent('0');
+
+      consoleWarnSpy.mockRestore();
+      consoleErrorSpy.mockRestore();
     });
   });
 
@@ -269,6 +274,8 @@ describe('VisitedStateProvider', () => {
 
   describe('共有URL状態復元', () => {
     it('不正なBase64URL文字列に対してエラーハンドリングを行う', () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       expect(() => {
         renderWithProvider(<TestComponent />, {
           initialMode: 'readonly',
@@ -278,6 +285,9 @@ describe('VisitedStateProvider', () => {
 
       // エラーが発生しても初期状態で動作続行
       expect(screen.getByTestId('visited-count')).toHaveTextContent('0');
+
+      consoleWarnSpy.mockRestore();
+      consoleErrorSpy.mockRestore();
     });
 
     it('パビリオン数と不整合なビット列に対してエラーハンドリングを行う', () => {

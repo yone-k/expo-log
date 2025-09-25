@@ -16,7 +16,8 @@ export type MapCanvasProps = {
   id?: string
 }
 
-const DEFAULT_MAP_SRC = '/assets/map.png'
+const DEFAULT_MAP_SRC = `${import.meta.env.BASE_URL}assets/map.png`
+const PIN_ICON_SRC = `${import.meta.env.BASE_URL}assets/pin.svg`
 const MAP_ALT_TEXT = '大阪・関西万博マップ'
 const DEFAULT_MAP_WIDTH = 2560
 const DEFAULT_MAP_HEIGHT = 1440
@@ -153,7 +154,7 @@ function MapCanvas({ mapSrc = DEFAULT_MAP_SRC, className, id }: MapCanvasProps) 
         return (
           <img
             key={pavilion.id}
-            src="/assets/pin.svg"
+            src={PIN_ICON_SRC}
             alt={`${pavilion.name}の訪問済みピン`}
             style={{
               position: 'absolute',

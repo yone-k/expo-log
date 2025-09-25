@@ -74,7 +74,7 @@ describe('PavilionList', () => {
     vi.resetAllMocks()
   })
 
-  it('名前順にパビリオンを表示する', () => {
+  it('JSONの定義順でパビリオンを表示する', () => {
     renderWithProvider(<PavilionList />)
 
     const checkboxes = screen.getAllByRole('checkbox')
@@ -82,8 +82,8 @@ describe('PavilionList', () => {
 
     expect(labels).toEqual([
       '関西パビリオン',
-      '大阪パビリオン',
       '日本パビリオン',
+      '大阪パビリオン',
     ])
   })
 

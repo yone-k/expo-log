@@ -7,7 +7,7 @@ import { VisitedStateProvider } from './context/VisitedStateProvider'
 import type { Pavilion } from './types/pavilion'
 import './App.css'
 
-const DATA_URL = '/data/pavilions.json'
+const DATA_URL = `${import.meta.env.BASE_URL}data/pavilions.json`
 const DEFAULT_RADIUS = 0.01
 const MAP_ELEMENT_ID = 'expo-map'
 

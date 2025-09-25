@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi, type Mock } from 'vitest'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import App from '../App'
 import type { Pavilion } from '../types/pavilion'
@@ -26,7 +26,7 @@ describe('App integration', () => {
 
   afterEach(() => {
     if (typeof fetch === 'function' && 'mockRestore' in fetch) {
-      ;(fetch as unknown as vi.Mock).mockRestore()
+      ;(fetch as unknown as Mock).mockRestore()
     }
     vi.unstubAllGlobals()
   })
@@ -154,6 +154,7 @@ describe('App integration', () => {
   })
 
   it('データ取得に失敗した場合に再試行ボタンを表示する', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
     const fetchMock = vi.fn()
       .mockResolvedValueOnce({ ok: false, status: 500 })
       .mockResolvedValueOnce({ ok: true, json: async () => samplePavilions })
@@ -170,5 +171,7 @@ describe('App integration', () => {
     await waitFor(() => {
       expect(screen.getByRole('img', { name: '大阪・関西万博マップ' })).toBeInTheDocument()
     })
+
+    consoleSpy.mockRestore()
   })
 })
